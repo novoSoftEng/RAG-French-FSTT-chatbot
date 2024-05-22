@@ -17,8 +17,11 @@ This README provides instructions on how to set up and run the Chroma Vector dat
    ```sh
    docker run -d --rm -v ./ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
    ```
-
-   This command will:
+    In case of Having AMD GPU , run with the following command
+    ```sh
+    docker run -d --device /dev/kfd --device /dev/dri -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama:rocm
+   ```
+    This command will:
    - Run the container in detached mode (`-d`).
    - Remove the container when it exits (`--rm`).
    - Mount the `./ollama` directory to `/root/.ollama` inside the container.
