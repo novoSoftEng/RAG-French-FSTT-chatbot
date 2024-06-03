@@ -1,0 +1,3 @@
+[submodule "ChatBot-FSTT-Front-End"]
+	path = ChatBot-FSTT-Front-End
+	url = git@github.com:novoSoftEng/ChatBot-FSTT-Front-End.git
