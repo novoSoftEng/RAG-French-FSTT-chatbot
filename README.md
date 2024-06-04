@@ -82,6 +82,12 @@ To save data to the Chroma Vector database, use the provided Jupyter Notebook.
 
 - For any network-related issues, ensure that port 11434 is not being used by another application and that your firewall settings allow traffic on this port.
 
+## RAG GEMMA 2B LLM :
+
+- run **ollama** in docker
+- run **'save_to_chroma'** notebook.
+- run **'RAG using Gemma, Langchain and ChromaDB'** notebook.
+
 ## Contact
 
 For further assistance, please contact [your contact information].
