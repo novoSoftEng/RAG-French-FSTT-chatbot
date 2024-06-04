@@ -2,6 +2,7 @@ import sys
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import gc
+
 # Append the path for the RAG module
 sys.path.append('../RAG')
 from RAG import AIAgent, RAGSystem, extract_answer_from_text 

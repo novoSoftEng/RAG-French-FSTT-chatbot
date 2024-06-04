@@ -2,20 +2,30 @@ version: '3.8'
 
 services:
   frontend:
+    image: nlp-front-end
     build:
-      context: ./frontend
+      context: ./ChatBot-FSTT-Front-End 
     ports:
       - "4200:4200"
     networks:
       - nlp-network
 
   backend:
+    image: nlp-back-end
     build:
-      context: ./backend
+      context: ./api
     ports:
       - "8500:8500"
     networks:
       - nlp-network
+
+  chroma:
+    image: nlp-chroma
+    build:
+      context: ./Data
+    networks:
+      - nlp-network
+
 networks:
   nlp-network:
-
+    

@@ -7,12 +7,55 @@ from langchain_community.vectorstores import Chroma
 import re
 from IPython.display import display, Markdown
 import pandas as pd
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize, RegexpTokenizer,sent_tokenize
+import nltk
+import re
 
+nltk.download('stopwords')
+french_stopwords = set(stopwords.words('french'))
 
 # ## AI Agent class :
 
 # In[3]:
 
+def preprocessing(text):
+    # Convert to string and lowercase
+    text = str(text).lower()
+    
+    # Remove URLs
+    # text = re.sub(r'http\S+|www\S+|https\S+', '', text, flags=re.MULTILINE)
+    
+    # Remove mentions
+    text = re.sub(r'@\w+', ' ', text)
+
+    text = re.sub(r'\xa0', ' ', text)
+    
+    # Remove \n
+    text = re.sub(r'\n', ' ', text)
+    
+    # Remove specific unwanted characters
+    text = re.sub(r'«|»|“|”|’|‘', ' ', text)
+    
+        # Tokenization
+    tokens_sentence = sent_tokenize(text, language="french")
+        
+    # Remove punctuation
+    # text = text.translate(str.maketrans("", "", string.punctuation))
+    pattern = r"[dnl]['´`]|\w+|\$[\d\.]+|\S+"
+    tokenizer = RegexpTokenizer(pattern)
+    token_words = tokenizer.tokenize(text)
+    
+    # tokens = word_tokenize(text, language="french")
+    token_words = [word for word in token_words if word not in french_stopwords]
+    
+    
+    # Stemming
+    # stemmer =nltk.stem.snowball.FrenchStemmer()
+    # tokens_stemmed = [stemmer.stem(word) for word in tokens]
+    
+    # Join tokens back into a single string
+    return token_words+tokens_sentence
 
 import os
 def extract_answer_from_text(text):
@@ -82,15 +125,17 @@ class AIAgent:
 # In[30]:
 def connect(): 
     # Configure the ChromaDB client with persistence
+    import chromadb.utils.embedding_functions as embedding_functions
+    huggingface_ef = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="sentence-transformers/multi-qa-mpnet-base-dot-v1")
     client = chromadb.HttpClient(host='localhost', port=8000)
-    collection = client.get_collection(name="text_embeddings")
+    collection = client.get_collection(name="text_embeddings",embedding_function=huggingface_ef)
     return collection
 
 class RAGSystem:
     """Sentence embedding based Retrieval Based Augmented generation.
        Given a ChromaDB collection, retriever finds num_retrieved_docs relevant documents."""
     
-    def __init__(self, ai_agent, collection=connect(), num_retrieved_docs=2):
+    def __init__(self, ai_agent, collection=connect(), num_retrieved_docs=4):
         self.num_docs = num_retrieved_docs
         self.collection = collection
         self.ai_agent = ai_agent
