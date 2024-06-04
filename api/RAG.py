@@ -37,8 +37,6 @@ def preprocessing(text):
     # Remove specific unwanted characters
     text = re.sub(r'«|»|“|”|’|‘', ' ', text)
     
-        # Tokenization
-    tokens_sentence = sent_tokenize(text, language="french")
         
     # Remove punctuation
     # text = text.translate(str.maketrans("", "", string.punctuation))
@@ -55,7 +53,7 @@ def preprocessing(text):
     # tokens_stemmed = [stemmer.stem(word) for word in tokens]
     
     # Join tokens back into a single string
-    return token_words+tokens_sentence
+    return ' '.join(token_words)
 
 import os
 def extract_answer_from_text(text):
@@ -86,22 +84,24 @@ class AIAgent:
 
     def create_prompt(self, query, context):
         # Prompt template
-        prompt = f"""
-        You are an AI Agent specialized to answer questions about FSTT (faculty of science and technology in Tanger).
+        prompt = f"""<|system|>
+        You are an AI Agent specialized to answer questions about FSTT (faculty of science and technology in Tanger). 
+        Vous allez repondre a des question sur les programmes , les profs , les formation dans la faculté
         Explain the concept or answer the question about FSTT.
         In order to create the answer,use the information from the context if it seems to be relevant to the question provided (Context). 
-        and the context will be as a list, so you must use just the most relevent informations from the list.
+        and the context will be as a list, so you should use just the most relevent informations from the list.
         Answer with simple words.
         If needed, include also explanations.
         it's important to answer with french languge.
         return only the answer
-        Question: {query}
         Context: {context}
-        Answer:
+        Question:<|user|> {query}
+        <|assistant|>Answer:
         """
         return prompt
     
-    def generate(self, query, retrieved_info=None):
+    def generate(self, query, retrieved_info="la fstt est la faculte de science et technique de tanger"):
+        query = preprocessing(query) 
         prompt = self.create_prompt(query, retrieved_info)
         input_ids = self.tokenizer(prompt, return_tensors="pt").input_ids
         
@@ -123,7 +123,7 @@ class AIAgent:
 
 
 # In[30]:
-def connect(): 
+def connect():
     # Configure the ChromaDB client with persistence
     import chromadb.utils.embedding_functions as embedding_functions
     huggingface_ef = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="sentence-transformers/multi-qa-mpnet-base-dot-v1")

@@ -30,7 +30,7 @@ def initialize_model():
                 # Initialize the AI Agent
                 ai_agent = AIAgent(model_name="google/gemma-2b-it")
                 # Initialize the RAGSystem with the existing collection
-                rag_system = RAGSystem(ai_agent=ai_agent, num_retrieved_docs=4)
+                rag_system = RAGSystem(ai_agent=ai_agent, num_retrieved_docs=15)
                 return jsonify({"response": True})
             except Exception as e:
                 return jsonify({"response": False, "error": str(e)})
@@ -49,6 +49,7 @@ def handle_query():
         # Get the prompt from the request JSON
         data = request.json
         prompt = data.get("prompt", "")
+        context = data.get("prevRes", "")
         if rag_system is None:
             res = ai_agent.generate(prompt)
         else:

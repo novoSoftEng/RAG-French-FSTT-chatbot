@@ -18,13 +18,13 @@ services:
       - "8500:8500"
     networks:
       - nlp-network
-
-  chroma:
-    image: nlp-chroma
-    build:
-      context: ./Data
-    networks:
-      - nlp-network
+    depends_on: 
+      - chroma
+  chroma: 
+    image: chromadb/chroma
+    container_name: chroma
+    networks: 
+     - nlp-network
 
 networks:
   nlp-network:
