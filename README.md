@@ -1,7 +1,8 @@
 # RAG-French-FSTT-chatbot
-## Chroma Vector Database
 
-This README provides instructions on how to set up and run the Chroma Vector database using Docker, as well as how to save data to the database using a Jupyter Notebook.
+This README provides instructions on how to set up and run the Chroma Vector database using Docker, how to Create RAG System for **Gemma 2b LLM**, how to fine-turn Gemma 2b LLM and how to run the chatbot interface.
+
+## Chroma Vector Database
 
 ### Prerequisites
 
@@ -82,16 +83,15 @@ To save data to the Chroma Vector database, use the provided Jupyter Notebook.
 
 - For any network-related issues, ensure that port 11434 is not being used by another application and that your firewall settings allow traffic on this port.
 
-## RAG GEMMA 2B LLM :
+## RAG System :
 
-- run **ollama** in docker
-- run **'save_to_chroma'** notebook.
-- run **'RAG using Gemma, Langchain and ChromaDB'** notebook.
+- execute **'save_to_chroma'** notebook to create ChromaDB (Vector DataBase).
+- execute **Docker compose app** notebook.
 
-## Contact
+## Fine-Turn the LLM :
 
-For further assistance, please contact [your contact information].
+- 
 
 ---
 
-This README file should help you get started with running and using the Chroma Vector database. If you have any additional questions or run into issues, don't hesitate to reach out.
+This README file should help you get started with running and using the Chroma Vector database and chatbot app.
